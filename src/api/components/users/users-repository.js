@@ -26,27 +26,27 @@ async function getUsers(PAGE_NUM, PAGE_SZ, SORTING_OP, SEARCH_OP) {
 
     const countTOTAL = await User.countDocuments(query); //
 
-    let SORTCRIT;
+    let SORTING_CRITERIA;
     if (SORTING_OP === 'desc') {
-      SORTCRIT = { name: -1 };
+      SORTING_CRITERIA = { name: -1 };
     } else {
-      SORTCRIT = { name: 1 };
+      SORTING_CRITERIA = { name: 1 };
     }
 
     if (SORTING_OP.includes(':desc')) {
       const [Namefield, orders] = SORTING_OP.split(' : ');
       if (Namefield === 'name' || Namefield === 'email') {
-        SORTCRIT = { [Namefield]: -1 };
+        SORTING_CRITERIA = { [Namefield]: -1 };
       }
     }
 
     // GET DATA DARI DATABASE
     let users;
     if (PAGE_SZ === 0) {
-      users = await User.find(query).sort(SORTCRIT);
+      users = await User.find(query).sort(SORTING_CRITERIA);
     } else {
       users = await User.find(query)
-        .sort(SORTCRIT)
+        .sort(SORTING_CRITERIA)
         .limit(PAGE_SZ)
         .skip(PAGE_NUM - 1);
     }

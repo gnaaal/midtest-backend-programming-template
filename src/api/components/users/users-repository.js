@@ -80,7 +80,12 @@ async function getUserByEmail(email) {
 async function changePassword(id, password) {
   return User.updateOne({ _id: id }, { $set: { password } });
 }
-
+/**Tambahan Function menghitung total user
+ * @returns {Promise}
+ */
+async function countUsers() {
+  return User.countDocuments({});
+}
 module.exports = {
   getUsers,
   getUser,
@@ -89,4 +94,5 @@ module.exports = {
   deleteUser,
   getUserByEmail,
   changePassword,
+  countUsers,
 };

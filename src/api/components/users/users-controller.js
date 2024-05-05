@@ -8,14 +8,26 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  * @param {object} next - Express route middlewares
  * @returns {object} Response object or pass an error to the next route
  */
-async function getUsers(request, response, next) {
+async function getUsers(request, response, next) {  //Pagniation and Filter Happens Here -Galang
   try {
-    const users = await usersService.getUsers();
+    const SEARCH_OP = request.query.search || '';
+    const SORTING_OP = request.query.sort || 'desc';
+    const PAGE_NUM = parseInt(request.query.page_number) || 1;
+    const PAGE_SZ = parseInt(request.query.page_size) || null;
+
+    const users = await usersService.getUsers(PAGE_NUM, PAGE_SZ, SORTING_OP, SEARCH_OP);
     return response.status(200).json(users);
   } catch (error) {
-    return next(error);
+    try {
+      const users = await usersService.getUsers();
+      return response.status(200).json(users);
+    } catch (BackupError) {
+      //Pass Error
+      return next( BackupError);
+    }
   }
 }
+
 
 /**
  * Handle get user detail request

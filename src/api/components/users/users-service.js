@@ -3,34 +3,20 @@ const { hashPassword, passwordMatched } = require('../../../utils/password');
 
 /**
  * Get list of users with pagination and filter
- * @param {number} page - Nomor Halaman (opsional) -Gal
- * @param {number} pageSize - Jumlah pengguna per halaman (opsional) -Gal
- * @param {Object} filter - filter objek dengan properties untuk memfilter pengguna (opsional) -Gal
- * @returns {Object}
+ *
  */
-async function getUsers(page = 1, pageSize = 10, filter = {}) {
-  //menghitung offset (yang di skip) berdasarkan no halaman dan size
-  const offset = (page - 1) * pageSize;
-  //get user dari pagination -Gal
-  const users = await usersRepository.getUsers(pageSize, offset, filter);
-  //menghitung total pengguna -Gal
-  const totalUsers = await usersRepository.countUsers(filter);
-  // total halaman -Gal
-  const totalPages = Math.ceil(totalUsers / pageSize);
-
-  return {
-    page_number: page,
-    page_size: pageSize,
-    count: users.length,
-    total_pages: totalPages,
-    has_previous_page: page > 1,
-    has_next_page: page < totalPages,
-    data: users.map((user) => ({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    })),
-  };
+async function getUsers(PAGE_NUM, PAGE_SZ, SORTING_OP, SEARCH_OP) {
+  try {
+    const users = await usersRepository.getUsers(
+      PAGE_NUM,
+      PAGE_SZ,
+      SORTING_OP,
+      SEARCH_OP
+    );
+    return users;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 }
 
 /**

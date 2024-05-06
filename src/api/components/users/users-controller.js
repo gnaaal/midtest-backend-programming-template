@@ -11,7 +11,7 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
 async function getUsers(request, response, next) {  //Pagniation and Filter Happens Here -Galang
   try {
     const SEARCH_OP = request.query.search || '';
-    const SORTING_OP = request.query.sort || 'desc';
+    const SORTING_OP = request.query.sort || 'desc'; //default desc untuk filter
     const PAGE_NUM = parseInt(request.query.page_number) || 1;
     const PAGE_SZ = parseInt(request.query.page_size) || null;
 

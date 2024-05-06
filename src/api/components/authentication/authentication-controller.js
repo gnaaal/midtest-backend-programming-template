@@ -27,6 +27,12 @@ async function login(request, response, next) {
 
     return response.status(200).json(loginSuccess);
   } catch (error) {
+    if (error.message === 'Too many failed login attempts') {
+      // Handle too many failed login attempts
+      return response
+        .status(403)
+        .json({ error: 'Too many failed login attempts' });
+    }
     return next(error);
   }
 }
